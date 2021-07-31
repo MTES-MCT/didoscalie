@@ -62,6 +62,11 @@ ApiClient  <- R6::R6Class(
     initialize = function(basePath=NULL, userAgent=NULL, defaultHeaders=NULL, username=NULL, password=NULL, apiKeys=NULL, accessToken=NULL, timeout=NULL,  retryStatusCodes=NULL, maxRetryAttempts=NULL){
       if (!is.null(basePath)) {
         self$basePath <- basePath
+      } else {
+        didoscalie_basepath <- Sys.getenv("DIDOSCALIE_BASE_PATH")
+        if (nchar(didoscalie_basepath) > 0) {
+          self$basePath <- didoscalie_basepath
+        }
       }
 
       if (!is.null(defaultHeaders)) {
@@ -189,8 +194,13 @@ ApiClient  <- R6::R6Class(
             }
           }
         } else {
+          # FIXME: dirty tricks, deserializeObj return a list of
+          # data.frame and should return a data.frame
+          if (class(obj) == 'list' & length(obj) > 0) {
+            obj <- obj[[1]]
+          }
           if(!is.null(nrow(obj))){
-            returnObj <- vector("list", length = nrow(obj))
+          returnObj <- vector("list", length = nrow(obj))
             if (nrow(obj) > 0) {
               for (row in 1:nrow(obj)) {
                 returnObj[[row]] <- self$deserializeObj(obj[row, , drop = FALSE], innerReturnType, pkgEnv)
