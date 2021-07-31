@@ -161,8 +161,12 @@ ApiClient  <- R6::R6Class(
 
     # Deserialize the content of api response to the given type.
     deserialize = function(resp, returnType, pkgEnv) {
-      respObj <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
-      self$deserializeObj(respObj, returnType, pkgEnv)
+      if (grepl("application/json", httr::headers(resp)$`content-type`)) {
+        respObj <- jsonlite::fromJSON(httr::content(resp, "text", encoding = "UTF-8"))
+        self$deserializeObj(respObj, returnType, pkgEnv)
+      } else {
+        httr::content(resp, "text", encoding = "UTF-8")
+      }
     },
 
 
