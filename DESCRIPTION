@@ -1,0 +1,14 @@
+Package: didoscalie
+Title: R Package Client for DiDo - API diffusion
+Version: 1.0.0
+Authors@R: person("Assistance API", email = "support-dido@developpement-durable.gouv.fr", role = c("aut", "cre"))
+Description: API de diffusion des données de DiDo sur Internet
+URL: https://github.com/GIT_USER_ID/GIT_REPO_ID
+BugReports: https://github.com/GIT_USER_ID/GIT_REPO_ID/issues
+Depends: R (>= 3.3)
+Encoding: UTF-8
+License: Ma licence
+LazyData: true
+Suggests: testthat
+Imports: jsonlite, httr, R6, base64enc
+RoxygenNote: 6.0.1.9000
