@@ -1,0 +1,51 @@
+---
+title: "premiers-pas"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{premiers-pas}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+Cette documentation donne quelques éléments pour exploiter l'API DiDo
+
+Pour accéder aux données, vous devez d'abord charger le package et initaliser l'API :
+
+```{r setup}
+library(didoscalie)
+api.dataset <- DatasetsApi$new()
+pagination.datasets <- api.dataset$PaginateDatasets(page=1, page.size = 10, text = 'pétrolier')
+```
+
+Vous avez maintenant accès aux 10 premiers datasets retournés avec :
+
+```{r}
+datasets <- pagination.datasets$data
+datasets
+```
+
+```{r}
+datafile <- datasets[[1]]$datafiles[[1]]
+datafile
+```
+
+# Accéder aux jeux de données
+
+```{r}
+api.datafiles = DatafilesApi$new()
+datafiles <- api.datafiles$PaginateDatafiles(page=1, page.size=10)
+datafiles
+```
+
+Comme pour les datasets, vous pouvez accéder aux jeux proprements dits en faisant :
+
+```{r}
+datafiles$data
+```
