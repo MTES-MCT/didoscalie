@@ -1,0 +1,78 @@
+---
+title: "premiers-pas"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{premiers-pas}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+# premiers pas sur DiDo avec didoscalie
+
+L'objectif de ce document est de vous donner les éléments de base pour interargir avec l'API DiDo.
+
+## Fonctionnement général
+
+Le fonctionnement général du package et le même pour toutes les routes de l'API :
+
+```{r setup}
+# charger la librairie
+library(didoscalie)
+# configurer la classe de l'API
+api.dataset <- DatasetsApi$new()
+# lancer la commande souhaitée
+pagination.datasets <- api.dataset$PaginateDatasets(page=1, page.size = 10, text = 'DROM')
+```
+
+## Trouver un fichier de données
+
+Lister tous les datafiles contenant "pétroliers" dans le titre :
+```{r}
+library(didoscalie)
+api.datafile <- DatafilesApi$new()
+datafiles <- api.datafile$PaginateDatafiles(page=1, page.size=10, text='DROM')$data
+datafiles
+```
+
+## Récupérer le dernier millésime d'un fichier de données
+
+Lister les informations du dernier millésime du fichier de données :
+
+```{r}
+library(didoscalie)
+api.datafile <- DatafilesApi$new()
+api.datafile$GetMillesimeDatafile(rid='6c79805c-def9-4695-9d9f-7d86599c4d8a')
+```
+
+Récupérer le dernier millésime du fichier de données :
+```{r}
+api.datafile$ExportCsvMillesimeDatafile(rid='6c79805c-def9-4695-9d9f-7d86599c4d8a', 
+                                        with.column.name=TRUE, 
+                                        with.column.description=FALSE,
+                                        with.column.unit=FALSE)
+```
+
+## les fichiers de données géolocalisés
+
+Si un fichier de données est géolocalisé, vous pouvez récupérer le geojson ou le shapefile.
+
+Vous pouvez vérifier les champs géolocalisés avec la commande :
+
+```{r}
+api.datafile <- DatafilesApi$new()
+api.datafile$GetMillesimeDatafile(rid='6c79805c-def9-4695-9d9f-7d86599c4d8a')$geoFields
+```
+
+Et pour récupérer le geojson sur le champ "REGION" :
+
+```{r}
+api.datafile$ExportGeojsonMillesimeDatafile(rid='6c79805c-def9-4695-9d9f-7d86599c4d8a',
+                                            geo.field='REGION')
+```

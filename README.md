@@ -34,11 +34,7 @@ R CMD INSTALL didoscalie_0.1.0.9000.tar.gz
 
 ### Install the package
 
-```R
-install.packages("didoscalie")
-```
-
-To install directly from Github, use `devtools`:
+This package isn't on CRAN, to install directly from Github, use `devtools`:
 ```R
 install.packages("devtools")
 library(devtools)
