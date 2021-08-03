@@ -12,6 +12,27 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+library(knitr)
+hook_output <- knit_hooks$get("output")
+knit_hooks$set(output = function(x, options) {
+  lines <- options$output.lines
+  if (is.null(lines)) {
+    return(hook_output(x, options))  # pass to default hook
+  }
+  x <- unlist(strsplit(x, "\n"))
+  more <- "..."
+  if (length(lines)==1) {        # first n lines
+    if (length(x) > lines) {
+      # truncate the output, but add ....
+      x <- c(head(x, lines), more)
+    }
+  } else {
+    x <- c(more, x[lines], more)
+  }
+  # paste these lines together
+  x <- paste(c(x, ""), collapse = "\n")
+  hook_output(x, options)
+})
 ```
 
 # premiers pas sur DiDo avec didoscalie
@@ -34,7 +55,7 @@ pagination.datasets <- api.dataset$PaginateDatasets(page=1, page.size = 10, text
 ## Trouver un fichier de données
 
 Lister tous les datafiles contenant "pétroliers" dans le titre :
-```{r}
+```{r, output.lines=10}
 library(didoscalie)
 api.datafile <- DatafilesApi$new()
 datafiles <- api.datafile$PaginateDatafiles(page=1, page.size=10, text='DROM')$data
@@ -45,14 +66,14 @@ datafiles
 
 Lister les informations du dernier millésime du fichier de données :
 
-```{r}
+```{r, output.lines=10}
 library(didoscalie)
 api.datafile <- DatafilesApi$new()
 api.datafile$GetMillesimeDatafile(rid='6c79805c-def9-4695-9d9f-7d86599c4d8a')
 ```
 
 Récupérer le dernier millésime du fichier de données :
-```{r}
+```{r, output.lines=10}
 api.datafile$ExportCsvMillesimeDatafile(rid='6c79805c-def9-4695-9d9f-7d86599c4d8a', 
                                         with.column.name=TRUE, 
                                         with.column.description=FALSE,
@@ -72,7 +93,7 @@ api.datafile$GetMillesimeDatafile(rid='6c79805c-def9-4695-9d9f-7d86599c4d8a')$ge
 
 Et pour récupérer le geojson sur le champ "REGION" :
 
-```{r}
+```{r, output.lines=10}
 api.datafile$ExportGeojsonMillesimeDatafile(rid='6c79805c-def9-4695-9d9f-7d86599c4d8a',
                                             geo.field='REGION')
 ```
