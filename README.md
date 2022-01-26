@@ -1,5 +1,11 @@
 # R API client for didoscalie
 
+** Ce projet est archivé** il est remplacé par le package didor
+disponible sur https://mtes-mct.github.io/didor/.
+
+Si vous cherchez le package pour alimenter DiDo il est disponible sur
+https://mtes-mct.github.io/didoscalim/.
+
 API de diffusion des données de DiDo sur Internet
 
 ## Overview
